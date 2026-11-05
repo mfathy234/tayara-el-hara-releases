@@ -6,7 +6,12 @@
   <meta name="theme-color" content="#f4e8cc">
   <title>Tayara El Hara | طيارة الحارة</title>
   <link rel="icon" type="image/png" href="TemplateData/favicon.png">
-  <link rel="apple-touch-icon" href="TemplateData/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="TemplateData/apple-touch-icon.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="طيارة الحارة">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <style>
     @font-face { font-family: Lalezar; src: url("TemplateData/Lalezar.ttf") format("truetype"); font-display: swap; }
     :root { --ink: #1d1612; --paper: #f4e8cc; --gold: #f2b531; --gold-dark: #c48a14; --red: #d63a2f; }
@@ -29,10 +34,11 @@
     #msg { font-size: 26px; letter-spacing: .5px; }
     #err { display: none; max-width: 80%; text-align: center; font: 16px/1.4 system-ui, sans-serif; color: var(--red); }
 
-    #fs { position: absolute; top: max(10px, env(safe-area-inset-top)); left: 10px; z-index: 6; width: 42px; height: 42px; padding: 0; border: 4px solid var(--ink); border-radius: 50%; background: var(--gold); cursor: pointer; display: none; }
-    #fs:active { transform: scale(.94); }
-    #fs svg { width: 100%; height: 100%; display: block; }
 
+    #install { position: fixed; z-index: 10; left: 50%; bottom: max(10px, env(safe-area-inset-bottom)); transform: translateX(-50%); display: none; align-items: center; gap: 8px; padding: 4px 6px 4px 14px; border: 3px solid var(--ink); border-radius: 18px; background: var(--gold); color: var(--ink); font: 18px Lalezar, system-ui, sans-serif; }
+    #install.show { display: flex; }
+    #install button { font: inherit; color: inherit; background: transparent; border: 0; padding: 2px 8px; cursor: pointer; touch-action: manipulation; }
+    #install #install-x { opacity: .6; }
     #rotate { position: fixed; inset: 0; z-index: 20; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; background: var(--paper); text-align: center; font-size: 26px; }
     #rotate .phone { width: 46px; height: 80px; border: 5px solid var(--ink); border-radius: 12px; background: var(--gold); animation: turn 1.6s ease-in-out infinite; }
     #rotate small { font: 600 15px system-ui, sans-serif; opacity: .75; }
@@ -50,31 +56,29 @@
       <div id="msg">جاري التحميل…</div>
       <div id="err"></div>
     </div>
-    <button id="fs" type="button" aria-label="Fullscreen / ملء الشاشة" title="Fullscreen / ملء الشاشة">
-      <svg viewBox="0 0 40 40" fill="none" stroke="#1d1612" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 9H9v4M27 9h4v4M13 31H9v-4M27 31h4v-4"/></svg>
-    </button>
+
   </div>
+  <div id="install"><button id="install-go" type="button">ثبّت اللعبة · Install</button><button id="install-x" type="button" aria-label="Close">&#x2715;</button></div>
   <div id="rotate"><div class="phone"></div><div>لفّ تليفونك طولي</div><small>Rotate your phone to portrait</small></div>
 
-  <script src="Build/c4b4dc3e6942b7f2bb4523d10320f9e3.loader.js"></script>
+  <script src="Build/59a76236e05f43c315ebf80e75c1def4.loader.js"></script>
   <script>
     (function () {
       var stage = document.getElementById("stage");
       var canvas = document.getElementById("canvas");
       var loading = document.getElementById("loading");
       var fill = document.getElementById("fill");
-      var fsBtn = document.getElementById("fs");
       var err = document.getElementById("err");
       var build = "Build";
       var config = {
         arguments: [],
-        dataUrl: build + "/85d6ccc0a988244452d3de2b30642b28.data.unityweb",
-        frameworkUrl: build + "/340b844fa831a4ed98528cc2186e1987.framework.js.unityweb",
-        codeUrl: build + "/bec5b2890bd9e6af503855657abcce14.wasm.unityweb",
+        dataUrl: build + "/e90829d172f044f47b9b68114237b70c.data.unityweb",
+        frameworkUrl: build + "/4aa7788af5e3a1b3a37738b76a5ea655.framework.js.unityweb",
+        codeUrl: build + "/483f4f8e1651e158e196b85ba8304251.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Tayara El Hara",
         productName: "Tayara El Hara",
-        productVersion: "0.4.0",
+        productVersion: "0.6.1",
         autoSyncPersistentDataPath: true,
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, window.matchMedia && window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2)
       };
@@ -86,15 +90,55 @@
       }
       sizeCanvas();
 
+      // Fullscreen is a button in the game's Settings (web only); the game calls these through TayaraWeb.jslib.
       var fsEl = stage.requestFullscreen ? stage : (stage.webkitRequestFullscreen ? stage : null);
-      if (fsEl && (document.fullscreenEnabled || document.webkitFullscreenEnabled)) fsBtn.style.display = "block";
-      fsBtn.addEventListener("click", function () {
+      window.tayaraCanFullscreen = function () {
+        return !!(fsEl && (document.fullscreenEnabled || document.webkitFullscreenEnabled));
+      };
+      window.tayaraToggleFullscreen = function () {
+        if (!window.tayaraCanFullscreen()) return;
         var on = document.fullscreenElement || document.webkitFullscreenElement;
         if (on) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
         var p = (fsEl.requestFullscreen || fsEl.webkitRequestFullscreen).call(fsEl);
         var lock = function () { try { screen.orientation.lock("portrait").catch(function () {}); } catch (e) {} };
         if (p && p.then) p.then(lock, function () {}); else lock();
+      };
+
+      var unity = null;
+      var hint = document.getElementById("install");
+      var deferred = null;
+      var dismissed = false;
+      try { dismissed = localStorage.getItem("tayara.installHint") === "0"; } catch (e) {}
+      var standalone = (window.matchMedia && (window.matchMedia("(display-mode: standalone)").matches || window.matchMedia("(display-mode: fullscreen)").matches)) || navigator.standalone;
+      window.addEventListener("beforeinstallprompt", function (e) {
+        e.preventDefault();
+        deferred = e;
+        if (!dismissed && !standalone) hint.classList.add("show");
       });
+      window.addEventListener("appinstalled", function () { hint.classList.remove("show"); deferred = null; });
+      document.getElementById("install-go").addEventListener("click", function () {
+        hint.classList.remove("show");
+        if (!deferred) return;
+        deferred.prompt();
+        deferred = null;
+      });
+      document.getElementById("install-x").addEventListener("click", function () {
+        hint.classList.remove("show");
+        try { localStorage.setItem("tayara.installHint", "0"); } catch (e) {}
+      });
+
+      // The run pauses when the tab is hidden; resuming stays manual.
+      function pageHidden() {
+        if (unity) { try { unity.SendMessage("Tayara El Hara", "OnPageHidden"); } catch (e) {} }
+      }
+      document.addEventListener("visibilitychange", function () { if (document.hidden) pageHidden(); });
+      window.addEventListener("pagehide", pageHidden);
+
+      if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
+        window.addEventListener("load", function () {
+          navigator.serviceWorker.register("sw.js?v=" + encodeURIComponent("0.6.1")).catch(function () {});
+        });
+      }
 
       function fail(message) {
         document.getElementById("msg").style.display = "none";
@@ -104,7 +148,8 @@
 
       createUnityInstance(canvas, config, function (progress) {
         fill.style.width = Math.round(progress * 100) + "%";
-      }).then(function () {
+      }).then(function (instance) {
+        unity = instance;
         loading.classList.add("done");
         setTimeout(function () { loading.style.display = "none"; }, 400);
         canvas.focus();

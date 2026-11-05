@@ -1,0 +1,21 @@
+{
+  "name": "طيارة الحارة | Tayara El Hara",
+  "short_name": "طيارة الحارة",
+  "description": "لعبة طيارات بأسلوب الكارتون القديم في شوارع مصر | A rubber-hose shoot 'em up over Egypt",
+  "lang": "ar",
+  "dir": "rtl",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone"],
+  "orientation": "portrait",
+  "background_color": "#f4e8cc",
+  "theme_color": "#f4e8cc",
+  "categories": ["games"],
+  "icons": [
+    { "src": "TemplateData/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "TemplateData/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "TemplateData/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
