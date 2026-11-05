@@ -75,8 +75,16 @@
         companyName: "Tayara El Hara",
         productName: "Tayara El Hara",
         productVersion: "0.4.0",
+        autoSyncPersistentDataPath: true,
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2)
       };
+
+      function sizeCanvas() {
+        var r = stage.getBoundingClientRect();
+        canvas.width = Math.max(1, Math.round(r.width * config.devicePixelRatio));
+        canvas.height = Math.max(1, Math.round(r.height * config.devicePixelRatio));
+      }
+      sizeCanvas();
 
       var fsEl = stage.requestFullscreen ? stage : (stage.webkitRequestFullscreen ? stage : null);
       if (fsEl && (document.fullscreenEnabled || document.webkitFullscreenEnabled)) fsBtn.style.display = "block";
