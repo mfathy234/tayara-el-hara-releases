@@ -76,7 +76,7 @@
         productName: "Tayara El Hara",
         productVersion: "0.4.0",
         autoSyncPersistentDataPath: true,
-        devicePixelRatio: Math.min(window.devicePixelRatio || 1, 2)
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, window.matchMedia && window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2)
       };
 
       function sizeCanvas() {
