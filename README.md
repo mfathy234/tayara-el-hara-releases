@@ -8,9 +8,11 @@
 
 <p align="center">
   <a href="https://github.com/mfathy234/tayara-el-hara-releases/releases/latest/download/TayaraElHara.apk"><strong>Download the latest APK</strong></a> ·
-  <a href="https://mfathy234.github.io/tayara-el-hara-releases/">Website</a> ·
+  <a href="https://tayara-el-hara.pages.dev/">Website</a> ·
   <a href="https://github.com/mfathy234/tayara-el-hara-releases/releases">All releases</a>
 </p>
+
+Website: https://tayara-el-hara.pages.dev/
 
 ## Install on your phone
 
