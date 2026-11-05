@@ -61,7 +61,7 @@
   <div id="install"><button id="install-go" type="button">ثبّت اللعبة · Install</button><button id="install-x" type="button" aria-label="Close">&#x2715;</button></div>
   <div id="rotate"><div class="phone"></div><div>لفّ تليفونك طولي</div><small>Rotate your phone to portrait</small></div>
 
-  <script src="Build/59a76236e05f43c315ebf80e75c1def4.loader.js"></script>
+  <script src="Build/6da53c9be5c56c29d56e0bad30e28598.loader.js"></script>
   <script>
     (function () {
       var stage = document.getElementById("stage");
@@ -72,13 +72,13 @@
       var build = "Build";
       var config = {
         arguments: [],
-        dataUrl: build + "/e90829d172f044f47b9b68114237b70c.data.unityweb",
+        dataUrl: build + "/fdace4b16810bdba41aa65614d4d5734.data.unityweb",
         frameworkUrl: build + "/4aa7788af5e3a1b3a37738b76a5ea655.framework.js.unityweb",
-        codeUrl: build + "/483f4f8e1651e158e196b85ba8304251.wasm.unityweb",
+        codeUrl: build + "/4703034638dcd288239dde4c9bce8ab1.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Tayara El Hara",
         productName: "Tayara El Hara",
-        productVersion: "0.6.1",
+        productVersion: "0.6.2",
         autoSyncPersistentDataPath: true,
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, window.matchMedia && window.matchMedia("(pointer: coarse)").matches ? 1.5 : 2)
       };
@@ -136,7 +136,7 @@
 
       if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost")) {
         window.addEventListener("load", function () {
-          navigator.serviceWorker.register("sw.js?v=" + encodeURIComponent("0.6.1")).catch(function () {});
+          navigator.serviceWorker.register("sw.js?v=" + encodeURIComponent("0.6.2")).catch(function () {});
         });
       }
 
